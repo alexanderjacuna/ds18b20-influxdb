@@ -11,21 +11,21 @@ dbname = "readings"
 #CREATE CLIENT OBJECT
 client = InfluxDBClient(host, port, user, password, dbname)
 
-print "Start"
-
 for sensor in W1ThermSensor.get_available_sensors([W1ThermSensor.THERM_SENSOR_DS18B20]):
-	print "Loop Start"
-	print("Sensor %s has temperature %.2f" % (sensor.id, sensor.get_temperature()))
-
 	
+	#UNCOMMENT FOR DEBUGGING
+	#print "Loop Start"
+	#print("Sensor %s has temperature %.2f" % (sensor.id, sensor.get_temperature()))
 
-	measurement = "venus-ds18b20-" + sensor.id
+	measurement = "ds18b20-" + sensor.id
 	temperature = sensor.get_temperature()
+	
+	#CONVERT TO FAHRENHEIT
 	temperature = round(temperature * 9/5.0 + 32,2)
 
-	print(sensor.id)
-	print(temperature)
-
+	#UNCOMMENT FOR DEBUGGING
+	#print(sensor.id)
+	#print(temperature)
 
 	data = [
 	{
@@ -38,4 +38,3 @@ for sensor in W1ThermSensor.get_available_sensors([W1ThermSensor.THERM_SENSOR_DS
 
 	#WRITE DATA
 	client.write_points(data)
-	print "Next"
